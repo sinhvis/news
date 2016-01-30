@@ -13,7 +13,7 @@ app.config([
         });
 
         $urlRouterProvider.otherwise('home');
-    }])
+    }]) ;
 
 app.factory('posts', [function(){
     var o = {
@@ -34,8 +34,8 @@ app.controller('MainCtrl', [
                 link: $scope.link,
                 upvotes: 0
             });
-            $scope.theTitle = '';
-            $scope.theLink = '';
+            $scope.title = '';
+            $scope.link = '';
         }
         $scope.incrementUpvotes = function(post){
             post.upvotes += 1;
