@@ -1,3 +1,5 @@
+// DEBUG
+console.log("DEBUG: Posts.js loading") ;
 var mongoose = require('mongoose') ;
 
 var PostSchema = new mongoose.Schema({
@@ -8,3 +10,5 @@ var PostSchema = new mongoose.Schema({
 }) ;
 
 mongoose.model('Post', PostSchema) ;
+
+console.log("DEBUG: Posts.js finished loading") ;
