@@ -60,11 +60,13 @@ router.param('post', function(req, res, next, id) {
 }) ;
 
 // route for returning a single post
-// post object was retrieved using the 
-// middleware function (router.param) and
-// attached to req object, request handler 
-// return JSON back to the client.
-router.get('/posts/:post', function(req, res){
+// Middleware function (roiuter.param)
+// was used to retrieve a single post
+// and attached to the req object
+// request handler has to return JSON object
+// back to the client.
+router.get('/posts/.post', function(req, res) {
 	res.json(req.post) ;
 }) ;
+
 module.exports = router ;
