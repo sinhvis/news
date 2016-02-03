@@ -16,7 +16,7 @@ var Comment = mongoose.model('Comment') ;
 // Retrieves all posts
 router.get('/posts', function(req, res, next) {
 	Post.find(function(err, posts) {
-		if(err) {return next(err); }
+		if(err) {return next(err) ; }
 
 		res.json(posts) ;
 	}) ;
@@ -35,4 +35,4 @@ router.post('/posts', function(req, res, next) {
 }) ;
 
 
-module.exports = router;
+module.exports = router ;
