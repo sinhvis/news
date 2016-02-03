@@ -34,5 +34,37 @@ router.post('/posts', function(req, res, next) {
 	}) ;
 }) ;
 
+// This loads a post object by ID.
+// Use Express' param() function to automatically
+// load an object.
+// Pre-loads post objects
+// This way, if router URL has :post in it,
+// this function will be run first.
+// If :post parameter has an ID, function will retrieve
+// post object and attach it to req object, 
+// after which route handler will be called.
+router.param('post', function(req, res, next, id) {
+	// Mongoose's query interface provides a flexible 
+	// way of interacting with the database.
+	var query = Post.findById(id) ;
 
+	query.exec(function(err, post) {
+		if(err) { return next(err) ; }
+		if(!post) {
+			return next(new Error('can\'t find post')) ;
+		}
+
+		req.post = post ;
+		return next() ;
+	}) ;
+}) ;
+
+// route for returning a single post
+// post object was retrieved using the 
+// middleware function (router.param) and
+// attached to req object, request handler 
+// return JSON back to the client.
+router.get('/posts/:post', function(req, res){
+	res.json(req.post) ;
+}) ;
 module.exports = router ;
