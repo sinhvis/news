@@ -35,7 +35,7 @@ router.post('/posts', function(req, res, next) {
 }) ;
 
 // This loads a post object by ID.
-// Use Express' param() function to automatically
+// Uses Express' param() function to automatically
 // load an object.
 // Pre-loads post objects
 // This way, if router URL has :post in it,
@@ -65,7 +65,7 @@ router.param('post', function(req, res, next, id) {
 // and attached to the req object
 // request handler has to return JSON object
 // back to the client.
-router.get('/posts/.post', function(req, res) {
+router.get('/posts/:post', function(req, res) {
 	res.json(req.post) ;
 }) ;
 
