@@ -22,7 +22,12 @@ app.config([
         .state('posts', {
             url: '/posts/{id}',
             templateUrl: '/posts.html',
-            controller: 'PostsCtrl'
+            controller: 'PostsCtrl',
+            resolve: {
+                post: ['$stateParams', 'posts', function($stateParams, posts) {
+                    return posts.get($stateParams.id) ;
+                }]
+            }
         }) ;
 
         $urlRouterProvider.otherwise('home');
@@ -105,10 +110,11 @@ $scope.incrementUpvotes = function(post){
 
 app.controller('PostsCtrl', [
     '$scope',
-    '$stateParams',
     'posts',
-    function ($scope, $stateParams, posts) {
-        $scope.post = posts.posts[$stateParams.id] ;
+    'post',
+    function ($scope, posts, post) {
+        // $scope.post = posts.posts[$stateParams.id] ;
+        $scope.post = post ;
 
         $scope.addComment = function() {
             if ($scope.body === '') { return ;}
