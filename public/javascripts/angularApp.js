@@ -9,7 +9,14 @@ app.config([
         .state('home', {
             url: '/home',
             templateUrl: '/home.html',
-            controller: 'MainCtrl'
+            controller: 'MainCtrl',
+            // resolve property of ui-router ensures
+            // posts are loaded when home state is loaded.
+            resolve: {
+                postPromise: ['posts',function(posts) {
+                    return posts.getAll() ;
+                }]
+            }
         }) 
 
         .state('posts', {
@@ -21,9 +28,21 @@ app.config([
         $urlRouterProvider.otherwise('home');
     }]) ;
 
-app.factory('posts', [function(){
+// Need to inject $http service to query posts route.
+app.factory('posts', ['$http', function($http){
     var o = {
         posts: []
+    } ;
+
+    // query /posts route and bind a function when request returns
+    // gets back a list and copy to posts object using angular.copy()
+    // angular.copy() returns deep copy of returned data.  
+    // Then $scope.posts in MainCtrl will also be updated.
+    // So, new values are reflected in the view.
+    o.getAll = function() {
+        return $http.get('/posts').success(function(data) {
+            angular.copy(data, o.posts) ;
+        }) ;
     } ;
     return o;
 }]) ;
