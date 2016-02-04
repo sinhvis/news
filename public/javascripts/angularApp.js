@@ -60,6 +60,13 @@ app.factory('posts', ['$http', function($http){
         }) ;
     } ;
 
+    // retrieve a single post from server
+    o.get = function(id) {
+        return $http.get('/posts/' + id).then(function(res) {
+            return res.data ;
+        }) ;
+    } ;
+
     return o;
 }]) ;
 
