@@ -80,8 +80,14 @@ router.param('comment', function(req, res, next, id) {
 // and attached to the req object
 // request handler has to return JSON object
 // back to the client.
+// Using populate method to automatically load
+// all comments associated with a particular post
 router.get('/posts/:post', function(req, res) {
-	res.json(req.post) ;
+	req.post.populate('comments', function(err, post) {
+		if (err) {return next(err) ; }
+
+		res.json(post) ;
+	})
 }) ;
 
 // router for upvote posts
