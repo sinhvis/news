@@ -59,8 +59,23 @@ router.param('post', function(req, res, next, id) {
 	}) ;
 }) ;
 
+
+// Middleware to load a comment object by ID
+router.param('comment', function(req, res, next, id) {
+	var query = Comment.findById(id) ;
+
+	query.exec(function(err, comment) {
+		if (err) { return next(err) ; }
+		if (!comment) { return next(new Error("can't find comment")); }
+
+		req.comment = comment ;
+		return next() ;
+	}) ;
+}) ;
+
+
 // route for returning a single post
-// Middleware function (roiuter.param)
+// Middleware function (router.param)
 // was used to retrieve a single post
 // and attached to the req object
 // request handler has to return JSON object
