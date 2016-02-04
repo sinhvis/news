@@ -7,9 +7,9 @@ app.config([
 
         $stateProvider
         .state('home', {
-            url: '/home',
-            templateUrl: '/home.html',
-            controller: 'MainCtrl',
+            url:            '/home',
+            templateUrl:    '/home.html',
+            controller:     'MainCtrl',
             // resolve property of ui-router ensures
             // posts are loaded when home state is loaded.
             resolve: {
@@ -20,9 +20,9 @@ app.config([
         }) 
 
         .state('posts', {
-            url: '/posts/{id}',
-            templateUrl: '/posts.html',
-            controller: 'PostsCtrl',
+            url:            '/posts/{id}',
+            templateUrl:    '/posts.html',
+            controller:     'PostsCtrl',
             resolve: {
                 post: ['$stateParams', 'posts', function($stateParams, posts) {
                     return posts.get($stateParams.id) ;
@@ -98,8 +98,8 @@ app.controller('MainCtrl', [
 
             // save posts to the server
             posts.create({
-                title: $scope.title,
-                link: $scope.link,
+                title:  $scope.title,
+                link:   $scope.link,
             }) ;
 
             // $scope.posts.push({
@@ -133,7 +133,7 @@ app.controller('PostsCtrl', [
             if ($scope.body === '') { return ; }
 
             posts.addComment(post._id, {
-                body: $scope.body,
+                body:   $scope.body,
                 author: 'user',
             }).success(function(comment) {
                 $scope.post.comments.push(comment) ;
