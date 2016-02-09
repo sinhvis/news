@@ -45,6 +45,12 @@ router.get('/posts', function(req, res, next) {
 router.post('/posts', auth, function(req, res, next) {
 	var post = new Post(req.body) ;
 
+	// associate authors with posts
+	// since authentication with JWT tokens,
+	// get username directly from tokens' payload
+	// this way don't need to go to the database.
+	post.author = req.payload.username ;
+
 	post.save(function(err, post) {
 		if (err) { return next(err) ; }
 
@@ -124,6 +130,10 @@ router.put('/posts/:post/upvote', auth, function(req, res, next) {
 router.post('/posts/:post/comments', auth, function(req, res, next) {
 	var comment = new Comment(req.body) ;
 	comment.post = req.post ;
+
+	// author field when creating comments
+	// gets authors name directly from payload
+	comment.author = req.payload.username ;
 
 	comment.save(function(err, comment) {
 		if(err) {return next(err) ; }
