@@ -4,8 +4,6 @@ var router = express.Router();
 // For username / authentication
 var passport = require('passport') ;
 
-// Import User mongoose model
-var User = mongoose.model('User') ;
 
 // for securing endpoints and associating comments
 // with users
@@ -18,6 +16,10 @@ router.get('/', function(req, res, next) {
 });
 
 var mongoose = require('mongoose') ;
+
+// Import User mongoose model
+var User = mongoose.model('User') ;
+
 var Post = mongoose.model('Post') ;
 var Comment = mongoose.model('Comment') ;
 
