@@ -7,6 +7,10 @@ var passport = require('passport') ;
 // Import User mongoose model
 var User = mongoose.model('User') ;
 
+// for securing endpoints and associating comments
+// with users
+var jwt = require('express-jwt') ;
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -17,8 +21,15 @@ var mongoose = require('mongoose') ;
 var Post = mongoose.model('Post') ;
 var Comment = mongoose.model('Comment') ;
 
+// Middleware for authenticating jwt tokens
+// userProperty - 	which property on req to put payload
+// 					from tokens
+// secret - use same secret as the one in models/User.js
+//			for generating tokens.
+//			Hard-coding this token, must use 
+//			environment variables for referencing secret.
 
-
+var auth = jwt({ secret: 'SECRET', userProperty: 'payload' }) ;
 // Retrieves all posts
 router.get('/posts', function(req, res, next) {
 	Post.find(function(err, posts) {
@@ -30,7 +41,8 @@ router.get('/posts', function(req, res, next) {
 
 
 // POST route for creating posts
-router.post('/posts', function(req, res, next) {
+// auth - requires authentication for creating a post.
+router.post('/posts', auth, function(req, res, next) {
 	var post = new Post(req.body) ;
 
 	post.save(function(err, post) {
@@ -97,7 +109,8 @@ router.get('/posts/:post', function(req, res) {
 }) ;
 
 // router for upvote posts
-router.put('/posts/:post/upvote', function(req, res, next) {
+// auth - require authentication for upvoting
+router.put('/posts/:post/upvote', auth, function(req, res, next) {
 	req.post.upvote(function(err, post) {
 		if (err) { return next(err) ; }
 
@@ -106,7 +119,9 @@ router.put('/posts/:post/upvote', function(req, res, next) {
 }) ;
 
 // router for comments route for a particular post
-router.post('/posts/:post/comments', function(req, res, next) {
+// auth - require authentication for commenting
+// set the author for comments.
+router.post('/posts/:post/comments', auth, function(req, res, next) {
 	var comment = new Comment(req.body) ;
 	comment.post = req.post ;
 
@@ -122,7 +137,8 @@ router.post('/posts/:post/comments', function(req, res, next) {
 	}) ;
 }) ;
 
-router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
+// auth - require authentication for upvoting comments
+router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, next) {
 	req.comment.upvote(function(err, comment) {
 		if (err) { return next(err) ; }
 
