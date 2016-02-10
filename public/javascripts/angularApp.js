@@ -98,6 +98,12 @@ app.factory('auth', ['$http', '$window', function($http,$window) {
         }) ;
     } ;
 
+    // logout function that removes user's token from
+    // localStorage logging the user out.
+    auth.logOut = function() {
+        $window.localStorage.removeItem('news-token');
+    } ;
+
     return auth ;
 }]) ;
 
