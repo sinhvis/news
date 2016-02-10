@@ -82,6 +82,14 @@ app.factory('auth', ['$http', '$window', function($http,$window) {
         }
     } ;
 
+    // register function posts user to /register route
+    // and saves token returned
+    auth.register = function(user) {
+        return $http.post('/register', user).success(function(data) {
+            auth.saveToken(data.token) ;
+        }) ;
+    } ;
+
     return auth ;
 }]) ;
 
