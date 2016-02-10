@@ -33,6 +33,48 @@ app.config([
         $urlRouterProvider.otherwise('home');
     }]) ;
 
+// Using localStorage for persisting data to client
+// If JWT token exits in localStorage, then user is logged in.
+// as long as the token isn't expired.
+// To log out remove token from localStorage
+// Need to inject $http for interfacing with server.
+// Need $window for interfacing with localStorage
+app.factory('auth', ['$http', '$window', function($http,$window) {
+    var auth = {} ;
+
+    // saveToken for setting token to localStorage
+    auth.saveToken = function(token) {
+        $window.localStorage['news-token'] = token ;
+    } ;
+
+    // getToken for getting token from localStorage
+    auth.getToken = function(token) {
+        return $window.localStorage['news-token'] ;
+    }
+
+    // if token exits, check payload to see if 
+    // token has expired.
+    // payload is the middle part of the token 
+    // between the two .s.  It's a JSON object
+    // that been base74'd
+    // get back the payload to a stringified JSON
+    // by using $window.atob(), and then back to 
+    // a JavaScript object with JSON.parse.
+    auth.isLoggedIn = function() {
+        var token = auth.getToken() ;
+
+        if (token) {
+            var payload = JSON.parse($window.atob(token.split('.')[1])) ;
+
+            return payload.exp > Date.now() / 1000 ;
+        } else {
+            return false ;
+        }
+    } ;
+
+    return auth ;
+}]) ;
+
 // Need to inject $http service to query posts route.
 app.factory('posts', ['$http', function($http){
     var o = {
