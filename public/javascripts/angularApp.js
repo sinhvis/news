@@ -90,6 +90,14 @@ app.factory('auth', ['$http', '$window', function($http,$window) {
         }) ;
     } ;
 
+    // login function posts user to /login route
+    // and saves token returned
+    auth.logIn - function(user) {
+        return $http.post('/login', user).success(function(data) {
+            auth.saveToken(data.token) ;
+        }) ;
+    } ;
+
     return auth ;
 }]) ;
 
