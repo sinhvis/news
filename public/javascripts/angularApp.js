@@ -30,10 +30,14 @@ app.config([
             }
         })
 
+        // state for login
+        // onEnter function: detects if the user is 
+        // authenticated before entering the state
+        // redirect them back to home if already logged in.
         .state('login', {
             url:            '/login',
             templateUrl:    '/login.html',
-            controller:     'AuthCtrl'
+            controller:     'AuthCtrl',
             onEnter:        ['$state', 'auth', function($state, auth) {
                 if(auth.isLoggedIn()) {
                     $state.go('home') ;
@@ -41,6 +45,7 @@ app.config([
             }]
         })
 
+        // state for register
         .state('register', {
             url:            '/register',
             templateUrl:    '/register.html',
@@ -97,7 +102,7 @@ app.factory('auth', ['$http', '$window', function($http,$window) {
     // returns the username of the user that's logged in.
     auth.currentUser = function() {
         if(auth.isLoggedIn()) {
-            var token - auth.getToken() ;
+            var token = auth.getToken() ;
             var payload = JSON.parse($window.atob(token.split('.')[1])) ;
 
             return payload.username ;
