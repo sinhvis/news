@@ -225,3 +225,35 @@ $scope.incrementUpvotes = function(comment) {
     posts.upvoteComment(post, comment) ;
 } ;
 }]) ;
+
+// Authentication Controller
+// Initialize user on $scope for our form
+// Create register and logIn() methods on scope
+// to call the respective methods on auth factory
+// Handle any errors and set $scope.error for 
+// displaying error messages later.
+// If not errors occur, send user back to home state
+// using a promise.
+app.controller('AuthCtrl', [
+    '$scope',
+    '$state',
+    'auth',
+    function($scope, $state, auth) {
+        $scope.user = {} ;
+
+        $scope.register = function() {
+            auth.register($scope.user).error(function(error) {
+                $scope.error = error ;
+            }).then(function() {
+                $state.go('home') ;
+            }) ;
+        } ;
+
+        $scope.logIn = function() {
+            auth.logIn($scope.user).error(function(error) {
+                $scope.error = error ;
+            }).then(function() {
+                $state.go('home') ;
+            }) ;
+        } ;
+    }]) ;
