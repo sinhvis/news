@@ -291,7 +291,7 @@ app.controller('AuthCtrl', [
 // auth factory
 app.controller('NavCtrl', [
     '$scope',
-    'auth'
+    'auth',
     function($scope, auth) {
         $scope.isLoggedIn = auth.isLoggedIn ;
         $scope.currentUser = auth.currentUser ;
