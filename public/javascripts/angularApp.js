@@ -66,7 +66,7 @@ app.config([
 // To log out remove token from localStorage
 // Need to inject $http for interfacing with server.
 // Need $window for interfacing with localStorage
-app.factory('auth', ['$http', '$window', function($http,$window) {
+app.factory('auth', ['$http', '$window', function($http, $window) {
     var auth = {} ;
 
     // saveToken for setting token to localStorage
@@ -135,7 +135,15 @@ app.factory('auth', ['$http', '$window', function($http,$window) {
 }]) ;
 
 // Need to inject $http service to query posts route.
-app.factory('posts', ['$http', function($http){
+// Need to send JWT token to server on authenticated
+// requests.  Done by injecting auth
+// The JWT token needs to be sent as an Authorization header
+// Format of this header:
+// Authorization: Bearer TOKEN.GOES.HERE
+// That object gets passed as the last argument for 
+// $http calls for create, upvote, addComment, and upVoteComment
+// methods in post service
+app.factory('posts', ['$http', 'auth', function($http, auth){
     var o = {
         posts: []
     } ;
@@ -153,15 +161,18 @@ app.factory('posts', ['$http', function($http){
 
     // create new posts
     o.create = function(post) {
-        return $http.post('/posts', post).success(function(data) {
+        return $http.post('/posts', post, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data) {
             o.posts.push(data) ;
         }) ;
     } ;
 
     // method for upvotes
     o.upvote = function(post) {
-        return $http.put('/posts/' + post._id + '/upvote')
-        .success(function(data) {
+        return $http.put('/posts/' + post._id + '/upvote', null, {
+            headers: {Authorization: 'Bearer '+auth.getToken()}
+        }).success(function(data) {
             post.upvotes += 1 ;
         }) ;
     } ;
@@ -175,6 +186,7 @@ app.factory('posts', ['$http', function($http){
 
     // adding comments
     o.addComment = function(id, comment) {
+        
         return $http.post('/posts/' + id + '/comments', comment) ;
     } ;
 
